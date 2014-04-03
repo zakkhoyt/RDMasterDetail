@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController
+@class DetailViewController;
 
+@protocol DetailViewControllerDelegate <NSObject>
+-(void)detailViewControllerMasterButtonTouchUpInside:(DetailViewController*)sender;
+@end
+
+@interface DetailViewController : UIViewController
+@property (nonatomic, weak) id <DetailViewControllerDelegate> delegate;
 @end

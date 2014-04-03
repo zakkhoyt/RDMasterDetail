@@ -1,161 +1,94 @@
-//
-//  ViewController.m
 //  MasterDetailview
-//
-//  Created by Rasmus Styrk on 8/26/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
+//  Created by Zakk Hoyt
+//  Copyright (c) 2014 Threefold photos. All rights reserved.
+
 
 #define MASTER_WIDTH 265
 
 #import "MasterDetailController.h"
+#import "DetailViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface MasterDetailController ()
+@interface MasterDetailController () <DetailViewControllerDelegate>
 @property BOOL masterVisible;
 @property (nonatomic, retain) UIView *masterView;
 @property (nonatomic, retain) UIView *detailView;
 @property (nonatomic, assign) UIViewController *masterController;
-@property (nonatomic, assign) UIViewController *detailController;
-- (void) showMaster: (BOOL) shouldShow;
+@property (nonatomic, assign) DetailViewController *detailController;
 @end
 
 @implementation MasterDetailController
-#pragma mark - Properties -
-@synthesize masterView = _masterView;
-@synthesize detailView = _detailView;
-@synthesize masterController = _masterController;
-@synthesize detailController = _detailController;
-@synthesize masterVisible = _masterVisible;
 
-#pragma mark -
 
-- (id) initWithMasterViewController:(UIViewController*)masterController detailViewController:(UIViewController*)detailController
-{
-    self = [super init];
+#pragma mark UIViewController
+-(void)viewDidLoad{
+    [super viewDidLoad];
     
-    if(self)
-    {
-        self.masterController = masterController;
-        self.detailController = detailController;
-        
-        [self.masterController setValue:self forKey:@"parentViewController"];
-        [self.detailController setValue:self forKey:@"parentViewController"];
-    }
-    
-    return self;
+    self.detailController = (DetailViewController*)[self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+    self.detailController.delegate = self;
+    [self changeDetailView:self.detailController];
 }
 
-- (void) dealloc
-{
-    [_masterView release];
-    [_detailView release];
-    
-    [super dealloc];
-}
 
-#pragma mark - helpers
+#pragma mark Private methods
 
-- (void) toggleMasterView
-{
-    [self showMaster:!self.masterVisible];
-}
 
 - (void) changeDetailView:(UIViewController *)detailController
 {
-    [self.detailController viewWillDisappear:NO];
-    [self.detailController.view removeFromSuperview];
-    [self.detailController viewDidDisappear:NO];
+    // Setup view frame
+    CGRect frameForView = self.view.frame;
     
-    self.detailController = detailController;
+    UIView *view = detailController.view;
+    CGRect offscreenLeftFrame = frameForView;
+    offscreenLeftFrame.origin.x = -offscreenLeftFrame.size.width;
+    view.frame = offscreenLeftFrame;
+    view.hidden = NO;
+    view.alpha = 1.0;
     
-    [self.detailController viewWillAppear:NO];
-    [self.detailView addSubview:self.detailController.view];
-    [self.detailController viewDidAppear:NO];
-
-}
-
-#pragma mark - View lifecycle
-
-- (void) viewDidUnload
-{
-    [super viewDidUnload];
     
-    self.masterController = nil;
-    self.detailController = nil;
+    // Shadow
+    detailController.view.layer.shadowOffset = CGSizeMake(-1, -1);
+    detailController.view.layer.shadowRadius = 5;
+    detailController.view.layer.shadowOpacity = 1.0;
+    detailController.view.layer.shadowColor = [[UIColor blackColor] CGColor];
+    detailController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:detailController.view.bounds].CGPath;
     
-    _detailView = nil;
-    _masterView = nil;
-}
-
-- (void) loadView
-{
-    [super loadView];
     
-    self.masterView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, MASTER_WIDTH, self.view.frame.size.height)] autorelease];
-    
-    [self.masterController viewWillAppear:NO];
-    [self.masterView addSubview: self.masterController.view];
-    [self.masterController viewDidAppear:NO];
-
-    self.detailView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)] autorelease];
-    
-    [self.detailController viewWillAppear:NO];
-    [self.detailView addSubview: self.detailController.view];
-    [self.detailController viewDidAppear:NO];
-    
-    self.detailView.layer.shadowOffset = CGSizeMake(-1, -1);
-    self.detailView.layer.shadowRadius = 5;
-    self.detailView.layer.shadowOpacity = 0.5;
-    self.detailView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    
-    self.detailView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.detailView.bounds].CGPath;
-
-    CGRect masterFrame = self.masterController.view.frame;
-    masterFrame.size.width = MASTER_WIDTH;
-    
-    self.masterController.view.frame = masterFrame;
-    
-    [self.view addSubview:self.masterView];
-    [self.view addSubview:self.detailView];
-    
+    // Add gesture recognizers
     UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(performSwipe:)];
     [swipe setNumberOfTouchesRequired:1];
     [swipe setDirection:UISwipeGestureRecognizerDirectionRight];
-    
-    [self.detailView addGestureRecognizer:swipe];
-    [swipe release];
-    
+    [detailController.view addGestureRecognizer:swipe];
     swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(performSwipe:)];
     [swipe setNumberOfTouchesRequired:1];
     [swipe setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [detailController.view addGestureRecognizer:swipe];
     
-    [self.detailView addGestureRecognizer:swipe];
-    [swipe release];
+    // Add child view and animate in
+    [self addChildViewController:detailController];
+    [self.view addSubview:detailController.view];
+    [detailController didMoveToParentViewController:self];
     
-    self.masterView = NO;
+    [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.7 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        view.frame = frameForView;
+    } completion:^(BOOL finished) {
+        
+    }];
+
 }
 
-- (void) performSwipe:(UISwipeGestureRecognizer*) swipe
-{
+-(void)performSwipe:(UISwipeGestureRecognizer*)swipe{
     UISwipeGestureRecognizerDirection direction = [swipe direction];
-    
-    switch (direction) 
-    {
+    switch (direction) {
         case UISwipeGestureRecognizerDirectionLeft:
-            
             if(self.masterVisible)
                 [self showMaster:NO];
-            
             break;
             
         case UISwipeGestureRecognizerDirectionRight:
-            
             if(!self.masterVisible)
                 [self showMaster:YES];
-            
             break;
-            
         default:
             break;
     }
@@ -163,43 +96,34 @@
 
 - (void) showMaster:(BOOL) shouldShow
 {
-    if(self.masterVisible)
-        [self.masterController viewWillDisappear:YES];
-    else 
-        [self.masterController viewWillAppear:YES];
     
-    CGRect frame = self.detailView.frame;
-    
-    if(shouldShow)
-        frame.origin.x = self.view.frame.size.width - (self.view.frame.size.width - MASTER_WIDTH);
-    else 
-        frame.origin.x = 0;
-    
-    [UIView beginAnimations:@"master" context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-    [UIView setAnimationDuration:0.2];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(masterDidAnimate:)];
-    
-    self.detailView.frame = frame;
-    
-    [UIView commitAnimations];
-    
-    self.masterVisible = shouldShow;
+    if(self.masterVisible == NO){
+        self.masterVisible = YES;
+        CGRect masterShowingRect = self.view.frame;
+        masterShowingRect.origin.x += MASTER_WIDTH;
+        [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.7 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.detailController.view.frame = masterShowingRect;
+//            self.detailController.view.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
+        } completion:^(BOOL finished) {
+            
+        }];
+    } else {
+        self.masterVisible = NO;
+        CGRect masterShowingRect = self.view.frame;
+        [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.7 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.detailController.view.frame = masterShowingRect;
+//            self.detailController.view.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+    }
 }
 
-- (void) masterDidAnimate:(id)sender
-{
-    if(self.masterVisible)
-        [self.masterController viewDidAppear:YES];
-    else 
-        [self.masterController viewDidDisappear:YES];
+#pragma mark DetailViewControllerDelegate
+-(void)detailViewControllerMasterButtonTouchUpInside:(DetailViewController*)sender{
+    [self showMaster:!self.masterVisible];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
 
 @end

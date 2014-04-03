@@ -15,13 +15,14 @@
 		C6C3704E18EE1CD300996FAC /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3704D18EE1CD300996FAC /* RDAppDelegate.m */; };
 		C6C3705118EE1CD300996FAC /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C3704F18EE1CD300996FAC /* Main_iPhone.storyboard */; };
 		C6C3705418EE1CD300996FAC /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C3705218EE1CD300996FAC /* Main_iPad.storyboard */; };
-		C6C3705718EE1CD300996FAC /* RDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3705618EE1CD300996FAC /* RDViewController.m */; };
 		C6C3705918EE1CD300996FAC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6C3705818EE1CD300996FAC /* Images.xcassets */; };
 		C6C3706018EE1CD300996FAC /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3705F18EE1CD300996FAC /* XCTest.framework */; };
 		C6C3706118EE1CD300996FAC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3703D18EE1CD300996FAC /* Foundation.framework */; };
 		C6C3706218EE1CD300996FAC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C3704118EE1CD300996FAC /* UIKit.framework */; };
 		C6C3706A18EE1CD300996FAC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6C3706818EE1CD300996FAC /* InfoPlist.strings */; };
 		C6C3706C18EE1CD300996FAC /* RDMasterDetailTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3706B18EE1CD300996FAC /* RDMasterDetailTests.m */; };
+		C6C3707918EE1D0700996FAC /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3707618EE1D0700996FAC /* DetailViewController.m */; };
+		C6C3707A18EE1D0700996FAC /* MasterDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3707818EE1D0700996FAC /* MasterDetailController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,14 +48,16 @@
 		C6C3704D18EE1CD300996FAC /* RDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
 		C6C3705018EE1CD300996FAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		C6C3705318EE1CD300996FAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		C6C3705518EE1CD300996FAC /* RDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RDViewController.h; sourceTree = "<group>"; };
-		C6C3705618EE1CD300996FAC /* RDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDViewController.m; sourceTree = "<group>"; };
 		C6C3705818EE1CD300996FAC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C6C3705E18EE1CD300996FAC /* RDMasterDetailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RDMasterDetailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C3705F18EE1CD300996FAC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C6C3706718EE1CD300996FAC /* RDMasterDetailTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RDMasterDetailTests-Info.plist"; sourceTree = "<group>"; };
 		C6C3706918EE1CD300996FAC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C6C3706B18EE1CD300996FAC /* RDMasterDetailTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RDMasterDetailTests.m; sourceTree = "<group>"; };
+		C6C3707518EE1D0700996FAC /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		C6C3707618EE1D0700996FAC /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		C6C3707718EE1D0700996FAC /* MasterDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDetailController.h; sourceTree = "<group>"; };
+		C6C3707818EE1D0700996FAC /* MasterDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterDetailController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,12 +117,14 @@
 		C6C3704318EE1CD300996FAC /* RDMasterDetail */ = {
 			isa = PBXGroup;
 			children = (
+				C6C3707518EE1D0700996FAC /* DetailViewController.h */,
+				C6C3707618EE1D0700996FAC /* DetailViewController.m */,
+				C6C3707718EE1D0700996FAC /* MasterDetailController.h */,
+				C6C3707818EE1D0700996FAC /* MasterDetailController.m */,
 				C6C3704C18EE1CD300996FAC /* RDAppDelegate.h */,
 				C6C3704D18EE1CD300996FAC /* RDAppDelegate.m */,
 				C6C3704F18EE1CD300996FAC /* Main_iPhone.storyboard */,
 				C6C3705218EE1CD300996FAC /* Main_iPad.storyboard */,
-				C6C3705518EE1CD300996FAC /* RDViewController.h */,
-				C6C3705618EE1CD300996FAC /* RDViewController.m */,
 				C6C3705818EE1CD300996FAC /* Images.xcassets */,
 				C6C3704418EE1CD300996FAC /* Supporting Files */,
 			);
@@ -256,7 +261,8 @@
 			files = (
 				C6C3704E18EE1CD300996FAC /* RDAppDelegate.m in Sources */,
 				C6C3704A18EE1CD300996FAC /* main.m in Sources */,
-				C6C3705718EE1CD300996FAC /* RDViewController.m in Sources */,
+				C6C3707A18EE1D0700996FAC /* MasterDetailController.m in Sources */,
+				C6C3707918EE1D0700996FAC /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

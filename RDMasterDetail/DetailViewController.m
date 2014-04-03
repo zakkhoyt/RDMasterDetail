@@ -11,13 +11,8 @@
 
 @implementation DetailViewController
 
-- (IBAction)toggleMaster:(id)sender 
-{
-    // MasterDetailController sets its masterController and detailController's 
-    // parenViewController property so we can access the control through this var
-    
-    MasterDetailController *master = (MasterDetailController*) self.parentViewController;
-    [master toggleMasterView];
+- (IBAction)toggleMasterButtonTouchUpInside:(id)sender {
+    [self.delegate detailViewControllerMasterButtonTouchUpInside:self];
 }
 
 @end
